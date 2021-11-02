@@ -1,0 +1,58 @@
+version: '3.9'
+
+services:
+  nginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports:
+      - '4000:80'
+  mongo-auth:
+    image: mongo
+    # ports:
+    #   - '27017:27017'
+    volumes:
+      - mongo-auth-vol:/data/db
+  auth:
+    build:
+      context: ./auth
+      dockerfile: Dockerfile.dev
+    # ports:
+    #   - '5000:5000'
+    volumes:
+      - /usr/src/app/node_modules
+      - ./auth:/usr/src/app
+    environment:
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://mongo-auth:27017/auth
+    command:
+      - npm
+      - run
+      - dev
+  mongo-payments:
+    image: mongo
+    # ports:
+    #   - '27017:27017'
+    volumes:
+      - mongo-payments-vol:/data/db
+  payments:
+    build:
+      context: ./payments
+      dockerfile: Dockerfile.dev
+    # ports:
+    #   - '5001:5000'
+    volumes:
+      - /usr/src/app/node_modules
+      - ./payments:/usr/src/app
+    environment:
+      - NODE_ENV=development
+    command:
+      - npm
+      - run
+      - dev
+volumes:
+  mongo-auth-vol:
+    driver: local
+  mongo-payments-vol:
+    driver: local
