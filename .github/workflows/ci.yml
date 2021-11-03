@@ -1,0 +1,54 @@
+name: Microservices Continious Integration
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-dev-images:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the auth image
+        run: docker build -f ./auth/Dockerfile.dev -t {{secrets.DOCKER_ID}}/auth ./auth
+      - name: Build the payments image
+        run: docker build -f ./payments/Dockerfile.dev -t {{secrets.DOCKER_ID}}/payments ./payments
+
+  tests:
+    runs-on: ubuntu-latest
+    needs: build-the-dev-images
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test the auth image
+        run: docker run {{secrets.DOCKER_ID}}/auth npm run test --if-present
+      - name: Test the payments image
+        run: docker run {{secrets.DOCKER_ID}}/payments npm run test --if-present
+
+  build-prod-images:
+    runs-on: ubuntu-latest
+    needs: tests
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the auth image
+        run: docker build -f ./auth/Dockerfile -t {{secrets.DOCKER_ID}}/auth ./auth
+      - name: Build the payments image
+        run: docker build -f ./payments/Dockerfile -t {{secrets.DOCKER_ID}}/payments ./payments
+      - name: Login to Docker Hub
+        run: echo {{secrets.DOCKER_PASSWORD}} | docker login -u {{secrets.DOCKER_ID}} --password-stdin
+      - name: Push the images
+        run: |
+          docker push {{secrets.DOCKER_ID}}/auth
+          docker push {{secrets.DOCKER_ID}}/payments
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-prod-images
+
+    steps:
+      - name: Deploy to the provider of choice
+        run: echo "This is provider specific"

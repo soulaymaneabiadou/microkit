@@ -24,18 +24,22 @@ services:
       - /usr/src/app/node_modules
       - ./auth:/usr/src/app
     environment:
-      - NODE_ENV=development
-      - MONGO_URI=mongodb://mongo-auth:27017/auth
+      - NODE_ENV=$NODE_ENV
+      - PORT=$PORT
+      - MONGO_URI=$MONGO_URI
+      - JWT_SECRET=$JWT_SECRET
+      - JWT_EXPIRE=$JWT_EXPIRE
+      - JWT_COOKIE_EXPIRE=$JWT_COOKIE_EXPIRE
+      - SMTP_HOST=$SMTP_HOST
+      - SMTP_PORT=$SMTP_PORT
+      - SMTP_EMAIL=$SMTP_EMAIL
+      - SMTP_PASSWORD=$SMTP_PASSWORD
+      - FROM_EMAIL=$FROM_EMAIL
+      - FROM_NAME=$FROM_NAME
     command:
       - npm
       - run
       - dev
-  mongo-payments:
-    image: mongo
-    # ports:
-    #   - '27017:27017'
-    volumes:
-      - mongo-payments-vol:/data/db
   payments:
     build:
       context: ./payments
@@ -46,13 +50,15 @@ services:
       - /usr/src/app/node_modules
       - ./payments:/usr/src/app
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=$NODE_ENV
+      - PORT=$PORT
+      - STRIPE_SECRET_KEY=$STRIPE_SECRET_KEY
+      - STRIPE_PUBLIC_KEY=$STRIPE_PUBLIC_KEY
+      - STRIPE_WEBHOOKS_SECRET=$STRIPE_WEBHOOKS_SECRET
     command:
       - npm
       - run
       - dev
 volumes:
   mongo-auth-vol:
-    driver: local
-  mongo-payments-vol:
     driver: local
