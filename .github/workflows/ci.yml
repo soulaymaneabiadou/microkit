@@ -19,7 +19,7 @@ jobs:
 
   tests:
     runs-on: ubuntu-latest
-    needs: build-the-dev-images
+    needs: build-dev-images
 
     steps:
       - uses: actions/checkout@v2
