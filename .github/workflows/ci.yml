@@ -13,9 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build the auth image
-        run: docker build -f ./auth/Dockerfile.dev -t soulaymaneabiadou/auth ./auth
+        run: docker build -f ./auth/Dockerfile.dev -t ${{secrets.DOCKER_ID}}/auth ./auth
       - name: Build the payments image
-        run: docker build -f ./payments/Dockerfile.dev -t soulaymaneabiadou/payments ./payments
+        run: docker build -f ./payments/Dockerfile.dev -t ${{secrets.DOCKER_ID}}/payments ./payments
 
   tests:
     runs-on: ubuntu-latest
@@ -24,9 +24,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Test the auth image
-        run: echo "No tests are here yet" # docker run soulaymaneabiadou/auth npm run test --if-present
+        run: echo "No tests are here yet" # docker run ${{secrets.DOCKER_ID}}/auth npm run test --if-present
       - name: Test the payments image
-        run: echo "No tests are here yet" # docker run soulaymaneabiadou/payments npm run test --if-present
+        run: echo "No tests are here yet" # docker run ${{secrets.DOCKER_ID}}/payments npm run test --if-present
 
   build-prod-images:
     runs-on: ubuntu-latest
@@ -35,15 +35,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build the auth image
-        run: docker build -f ./auth/Dockerfile -t soulaymaneabiadou/auth ./auth
+        run: docker build -f ./auth/Dockerfile -t ${{secrets.DOCKER_ID}}/auth ./auth
       - name: Build the payments image
-        run: docker build -f ./payments/Dockerfile -t soulaymaneabiadou/payments ./payments
+        run: docker build -f ./payments/Dockerfile -t ${{secrets.DOCKER_ID}}/payments ./payments
       - name: Login to Docker Hub
-        run: echo {{secrets.DOCKER_PASSWORD}} | docker login -u {{secrets.DOCKER_ID}} --password-stdin
+        run: echo ${{secrets.DOCKER_PASSWORD}} | docker login -u ${{secrets.DOCKER_ID}} --password-stdin
       - name: Push the images
         run: |
-          docker push soulaymaneabiadou/auth
-          docker push soulaymaneabiadou/payments
+          docker push ${{secrets.DOCKER_ID}}/auth
+          docker push ${{secrets.DOCKER_ID}}/payments
 
   deploy:
     runs-on: ubuntu-latest
