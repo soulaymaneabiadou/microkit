@@ -4,7 +4,6 @@ WORKDIR /usr/src/app
 COPY package*.json tsconfig.json ./
 RUN npm install
 COPY . .
-USER node
 RUN npm run build
 
 ## this is stage two , where the app actually runs
