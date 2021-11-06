@@ -22,9 +22,15 @@ docker compose --env-file ./.env up -d --build
 
 > Coming Soon
 
+### Deployment and CI
+
+The system uses Github actions as a CI solution, the actions run on each push to main or dev or on pull_request to main, you can customize it to your desire, and in order for the actions to function properly, you need to add two secrets to the repo, those are `DOCKER_ID` and `DOCKER_PASSWORD`.
+
+The CI script has a deploy section, but it empty, so you can set it up with your provider of preference(such as AWS or GCP).
+
 ## Auth micro-service
 
-A complete auth service built using **[Typescript](https://nodejs.org)**, **[Node JS](https://nodejs.org)** and **[Express](https://expressjs.com)**, while using **[MongoDB](https://mongodb.com)** as the database of choice, utilizing **[Mongoose](https://mongoosejs.com/)**, among others.
+A complete, and standalone, auth service built using **[Typescript](https://nodejs.org)**, **[Node JS](https://nodejs.org)** and **[Express](https://expressjs.com)**, while using **[MongoDB](https://mongodb.com)** as the database of choice, utilizing **[Mongoose](https://mongoosejs.com/)**, among others.
 
 The service relies on **[JWTs](https://jwt.io)** as its main auth mechanisim, while utilizing cookies for the transport, as well as just sending the JWT for clients if they are unable to use cookies(A mobile app for instance).
 
@@ -54,7 +60,7 @@ npm start     # to start the server
 
 ## Marketplace micro-service
 
-A complete marketplace service built using **[Typescript](https://nodejs.org)**, **[Node JS](https://nodejs.org)** and **[Express](https://expressjs.com)** among others.
+A complete, and standalone, marketplace service built using **[Typescript](https://nodejs.org)**, **[Node JS](https://nodejs.org)** and **[Express](https://expressjs.com)** among others.
 
 The service relies on **[Stripe](https://stripe.com)** as its backbone
 
