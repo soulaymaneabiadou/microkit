@@ -28,6 +28,8 @@ The system uses Github actions as a CI solution, the actions run on each push to
 
 The CI script has a deploy section, but it empty, so you can set it up with your provider of preference(such as AWS or GCP).
 
+---
+
 ## Auth micro-service
 
 A complete, and standalone, auth service built using **[Typescript](https://nodejs.org)**, **[Node JS](https://nodejs.org)** and **[Express](https://expressjs.com)**, while using **[MongoDB](https://mongodb.com)** as the database of choice, utilizing **[Mongoose](https://mongoosejs.com/)**, among others.
@@ -85,3 +87,7 @@ To build the app:
 npm run build   # to install the dependancies
 npm start     # to start the server
 ```
+
+---
+
+> And more to come
