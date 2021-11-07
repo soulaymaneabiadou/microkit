@@ -42,9 +42,7 @@ jobs:
         run: echo ${{secrets.DOCKER_PASSWORD}} | docker login -u ${{secrets.DOCKER_ID}} --password-stdin
       - name: Push the images
         run: |
-          docker push ${{secrets.DOCKER_ID}}/auth
           docker push ${{secrets.DOCKER_ID}}/auth:${{ github.sha }}
-          docker push ${{secrets.DOCKER_ID}}/payments
           docker push ${{secrets.DOCKER_ID}}/payments:${{ github.sha }}
 
   deploy:
