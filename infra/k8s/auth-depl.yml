@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: soulaymaneabiadou/auth
+          env:
+            - name: PORT
+              value: '5000'
+            - name: MONGO_URI
+              value: 'mongodb://auth-mongo-srv:27017/auth'
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secrets
+                  key: JWT_SECRET
+            - name: JWT_EXPIRE
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secrets
+                  key: JWT_EXPIRE
+            - name: JWT_COOKIE_EXPIRE
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secrets
+                  key: JWT_COOKIE_EXPIRE
+            - name: SMTP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: smtp-secrets
+                  key: SMTP_HOST
+            - name: SMTP_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: smtp-secrets
+                  key: SMTP_PORT
+            - name: SMTP_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: smtp-secrets
+                  key: SMTP_EMAIL
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: smtp-secrets
+                  key: SMTP_PASSWORD
+            - name: FROM_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: smtp-secrets
+                  key: FROM_EMAIL
+            - name: FROM_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: smtp-secrets
+                  key: FROM_NAME
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+spec:
+  selector:
+    app: auth
+  type: ClusterIP
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 5000
+      targetPort: 5000

@@ -20,7 +20,10 @@ docker compose --env-file ./.env up -d --build
 
 ### Kubernetes
 
-> Coming Soon
+> There are a few secrets that should be set, since the manifests relies on them to pass envs to the containers. Those are: jwt-secrets, stripe-secrets and smtp-secrets.
+
+All services have at least a depl + srv in a file named `<service_name>-depl.yml`
+Some services, who require a database, have an accompaning file named `<service_name>-<db_provider>-depl.yml`
 
 ### Deployment and CI
 
@@ -38,28 +41,6 @@ The service relies on **[JWTs](https://jwt.io)** as its main auth mechanisim, wh
 
 ### Setups
 
-First thing, is creating a `.env` file inside the root directory, by copying the example one or by running
-
-```bash
-cp .env.exxmple .env
-```
-
-To run the server locally:
-
-```bash
-npm install   # to install the dependancies
-npm run dev   # to run the dev server
-```
-
-To build the app:
-
-```bash
-npm run build   # to install the dependancies
-npm start     # to start the server
-```
-
----
-
 ## Marketplace micro-service
 
 A complete, and standalone, marketplace service built using **[Typescript](https://nodejs.org)**, **[Node JS](https://nodejs.org)** and **[Express](https://expressjs.com)** among others.
@@ -68,26 +49,6 @@ The service relies on **[Stripe](https://stripe.com)** as its backbone
 
 ### Setups
 
-First thing, is creating a `.env` file inside the root directory, by copying the example one or by running
-
-```bash
-cp .env.exxmple .env
-```
-
-To run the server locally:
-
-```bash
-npm install   # to install the dependancies
-npm run dev   # to run the dev server
-```
-
-To build the app:
-
-```bash
-npm run build   # to install the dependancies
-npm start     # to start the server
-```
-
----
+Needs a secret named `stripe-secrets`
 
 > And more to come
