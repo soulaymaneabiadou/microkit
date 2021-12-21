@@ -1,15 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import asyncHandler from './async';
-import { User, UserDoc } from '../models/User';
+import { User } from '../models/User';
 import ErrorResponse from '../utils/errorResponse';
 
-interface IRequest extends Request {
-  user: UserDoc;
-}
-
 export const protect = asyncHandler(
-  async (req: IRequest, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     let token;
 
     if (

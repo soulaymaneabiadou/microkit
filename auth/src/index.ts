@@ -1,11 +1,24 @@
 import { config } from 'dotenv';
 import { connectDB } from './config/db';
 import { app } from './app';
+import { UserDoc } from './models/User';
 
 config();
 
+declare global {
+  namespace Express {
+    interface Request {
+      user?: UserDoc;
+    }
+  }
+}
+
 const start = async () => {
   const PORT = process.env.PORT;
+
+  if (!process.env.MONGO_URI) {
+    throw new Error('MONGO_URI must be defined');
+  }
 
   try {
     await connectDB();

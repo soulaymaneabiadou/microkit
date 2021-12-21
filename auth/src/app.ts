@@ -9,8 +9,13 @@ import rateLimit from 'express-rate-limit';
 import hpp from 'hpp';
 
 import errorHandler from './middleware/error';
-
-import auth from './routes/auth';
+import { signupRouter } from './routes/signup';
+import { currentUserRouter } from './routes/currentUser';
+import { signinRouter } from './routes/signin';
+import { signoutRouter } from './routes/signout';
+import { resetPasswordRouter } from './routes/resetPassword';
+import { updateDetailsRouter } from './routes/updateDetails';
+import { updatePasswordRouter } from './routes/updatePassword';
 
 const app = express();
 
@@ -40,16 +45,22 @@ app.use(hpp());
 app.use(
   cors({
     credentials: true,
-    origin: process.env.CLIENT_URL
+    origin: '*'
   })
 );
 
-app.use('/', auth);
+app.use(currentUserRouter);
+app.use(signupRouter);
+app.use(signinRouter);
+app.use(signoutRouter);
+app.use(resetPasswordRouter);
+app.use(updateDetailsRouter);
+app.use(updatePasswordRouter);
 
 app.use(errorHandler);
 
 app.all('*', (req, res, next) => {
-  res.send('404');
+  res.status(404).json({ message: 'Route Not Found' });
 });
 
 export { app };

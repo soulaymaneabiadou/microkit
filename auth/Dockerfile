@@ -1,5 +1,5 @@
 ## this is the stage one , also know as the build step
-FROM node:alpine as Build
+FROM node:16-alpine as Build
 WORKDIR /usr/src/app
 COPY package*.json tsconfig.json ./
 RUN npm install
@@ -7,7 +7,7 @@ COPY . .
 RUN npm run build
 
 ## this is stage two , where the app actually runs
-FROM node:alpine as Serve
+FROM node:16-alpine as Serve
 WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install --only=prod
