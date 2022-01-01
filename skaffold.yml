@@ -4,20 +4,13 @@ deploy:
   kubectl:
     manifests:
       - ./infra/k8s/*
+      - ./infra/k8s-dev/*
 build:
   local:
     push: false
   artifacts:
     - image: soulaymaneabiadou/auth
       context: auth
-      docker:
-        dockerfile: Dockerfile.dev
-      sync:
-        manual:
-          - src: 'src/**/*.ts'
-            dest: .
-    - image: soulaymaneabiadou/payments
-      context: payments
       docker:
         dockerfile: Dockerfile.dev
       sync:

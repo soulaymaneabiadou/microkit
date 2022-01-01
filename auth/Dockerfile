@@ -11,7 +11,7 @@ FROM node:16-alpine as Serve
 WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install --only=prod
-COPY --from=0 /usr/src/app/dist ./dist
+COPY --from=Build /usr/src/app/dist ./dist
 USER node
 EXPOSE 5000
 

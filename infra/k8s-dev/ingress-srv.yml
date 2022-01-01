@@ -8,7 +8,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
-    - host: ticketing.dev
+    - host: local.dev
       http:
         paths:
           - path: /api/auth(/|$)(.*)
@@ -16,12 +16,5 @@ spec:
             backend:
               service:
                 name: auth-srv
-                port:
-                  number: 5000
-          - path: /api/payments(/|$)(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: payments-srv
                 port:
                   number: 5000

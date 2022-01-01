@@ -1,0 +1,29 @@
+name: Deploy the auth service
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'auth/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Building the auth image
+        run: cd auth && docker build -t soulaymaneabiadou/auth .
+      - name: Logging to Docker Hub
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Pushing the image to the Hub
+        run: docker push soulaymaneabiadou/auth
+      - uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Updating the deployment on DO
+        run: doctl kubernetes cluster kubeconfig save microservices
+        run: kubectl rollout restart deployment auth-depl

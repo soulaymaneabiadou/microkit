@@ -1,54 +1,50 @@
 # Microservices
 
-### Docs
+A collection of microservices, aimed at easing the development of new apps under the microservice architecture(can be used to quick start an app as a monolith using some of its parts).
 
-You can find the api docs at the following link: **[API Docs](https://documenter.getpostman.com/view/7211750/UUxwBU99)**
+### API Docs
+
+You can find the api docs at the following link: **[API Docs](https://...)**
 
 ---
 
-### Docker
+# What's Included / Services
 
-While each directory can be built and deployed independantly, by using the dokcer build and run commands. I advise to use dokcer compose to ease the DX.
+### Auth micro-service
 
-In order to use docker compose, create a `.env` file in the project root directory, add all of the needed variables and run:
+A complete, and standalone, auth service built using **[Typescript](https://nodejs.org)**, **[Node JS](https://nodejs.org)** and **[Express](https://expressjs.com)**, while using **[MongoDB](https://mongodb.com)** as the database of choice, utilizing **[Mongoose](https://mongoosejs.com/)**, among others.
 
-```bash
-docker compose --env-file ./.env up -d
-# Use the `--build` flag to rebuild the images
-docker compose --env-file ./.env up -d --build
-```
+The service relies on **[JWTs](https://jwt.io)** as its main auth mechanisim, while utilizing cookies for the transport, as well as just sending the JWT for clients if they are unable to use cookies(A mobile app for instance), and sends mails using nodemailer for now.
+
+---
 
 ### Kubernetes
 
-> There are a few secrets that should be set, since the manifests relies on them to pass envs to the containers. Those are: jwt-secrets, stripe-secrets and smtp-secrets.
+> There are a few secrets that should be set, since the manifests relies on them to pass envs to the containers. Those are: `jwt-secrets` and `smtp-secrets`.
 
 All services have at least a depl + srv in a file named `<service_name>-depl.yml`
 Some services, who require a database, have an accompaning file named `<service_name>-<db_provider>-depl.yml`
 
-### Deployment and CI
-
-The system uses Github actions as a CI solution, the actions run on each push to main or dev or on pull_request to main, you can customize it to your desire, and in order for the actions to function properly, you need to add two secrets to the repo, those are `DOCKER_ID` and `DOCKER_PASSWORD`.
-
-The CI script has a deploy section, but it empty, so you can set it up with your provider of preference(such as AWS or GCP).
-
 ---
 
-## Auth micro-service
+### Deployment and CI
 
-A complete, and standalone, auth service built using **[Typescript](https://nodejs.org)**, **[Node JS](https://nodejs.org)** and **[Express](https://expressjs.com)**, while using **[MongoDB](https://mongodb.com)** as the database of choice, utilizing **[Mongoose](https://mongoosejs.com/)**, among others.
+The system uses Github actions as a CI solution and Digital Ocean as a Cloud Provider, in order for the actions to function properly, you need to add a few secrets to the repo, those are `DOCKER_USERNAME`, `DOCKER_PASSWORD` and `DIGITALOCEAN_ACCESS_TOKEN`.
 
-The service relies on **[JWTs](https://jwt.io)** as its main auth mechanisim, while utilizing cookies for the transport, as well as just sending the JWT for clients if they are unable to use cookies(A mobile app for instance).
+##### Steps
 
-### Setups
+- Create a DO cluster:
+  - capacity(3 of the standard nodes for 10USD/month each)
+  - set a name for the cluster
+- use kubectl to connect to the cluster via the context:
+  - install doctl
+  - generate an access token from the api tab on DO for doctl for both dev and for prod to use on gh action
+  - authenticate doctl: `doctl auth init`
+  - use `doctl kubernetes cluster kubeconfig save <name>` to set the context
+- Set a gh workflow file for each service for tests and deployments
+- Setup `ingress-nginx` on DO using its docs for that on the cluster context
 
-## Marketplace micro-service
+##### Notes
 
-A complete, and standalone, marketplace service built using **[Typescript](https://nodejs.org)**, **[Node JS](https://nodejs.org)** and **[Express](https://expressjs.com)** among others.
-
-The service relies on **[Stripe](https://stripe.com)** as its backbone
-
-### Setups
-
-Needs a secret named `stripe-secrets`
-
-> And more to come
+- list context: `kubectl config view`
+- use context: `kubectl config use-context <name>`
