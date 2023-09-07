@@ -2,12 +2,6 @@
 
 A collection of microservices, aimed at easing the development of new apps under the microservice architecture(can be used to quick start an app as a monolith using some of its parts).
 
-### API Docs
-
-You can find the api docs at the following link: **[API Docs](https://...)**
-
----
-
 # What's Included / Services
 
 ### Auth micro-service
